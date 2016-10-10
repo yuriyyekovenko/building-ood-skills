@@ -1,0 +1,189 @@
+package main;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+
+//TODO Maybe, the best implementation is with nested builder class in Wheel2.
+/**
+ * Created by iiekovenko on 05.10.16.
+ * Builder creates the Outcomes for all of the 38
+ * individual Bin on a Roulette wheel.
+ */
+public class BinBuilder {
+    private Wheel wheel;
+    private int binCount = 38; //including double-zero
+
+//    /** MY CUSTOMIZATION
+//     * Constructor creates a wheel and fills it in with outcomes.
+//     * So, to get a ready-to-use wheel, the user should ask BinBuilder
+//     * to build it. In result, the user receives the wheel only after
+//     * it is ready, so no inconsistencies. That is, this variant of
+//     * construction is better than suggested in the book (see the next method).
+//     */
+//    public Wheel buildBins() {
+//        wheel = new Wheel(new Random());
+//        generateStraightBets();
+//        generateFiveBet();
+//        generateSplitBets();
+//        generateStreetBets();
+//        generateCornerBets();
+//        generateLineBets();
+//        generateDozenBets();
+//        generateColumnBets();
+//        generateEvenMoneyBets();
+//        return wheel;
+//    }
+
+    /** ORIGINAL VERSION (PER BOOK)
+     * This build-method (per book instruction) receives Wheel object
+     * with empty bins and fills them in with outcomes.
+     * So, theoretically, the wheel exist for some time in inconsistent state.
+     * That is, misuse becomes possible. BAD.
+     */
+    public void buildBins(Wheel wheel) {
+        this.wheel = wheel;
+        for (int i = 0; i < binCount; i++)
+            this.wheel.addBin(new Bin());
+
+        generateStraightBets();
+        generateFiveBet();
+        generateSplitBets();
+        generateStreetBets();
+        generateCornerBets();
+        generateLineBets();
+        generateDozenBets();
+        generateColumnBets();
+        generateEvenMoneyBets();
+    }
+    private void generateFiveBet() {
+        Outcome five = new Outcome("00-0-1-2-3", RouletteGame.FIVEBET);
+        wheel.addOutcome(37, five);
+        for (int i=0; i<6; i++) {
+            wheel.addOutcome(i, five);
+        }
+    }
+    private void generateStraightBets() {
+        wheel.addOutcome(37,
+                new Outcome("00", RouletteGame.STRAIGHTBET));
+        for (int i=0; i<37; i++) {
+            wheel.addOutcome(i,
+                    new Outcome(Integer.toString(i),
+                    RouletteGame.STRAIGHTBET));
+        }
+    }
+    private void generateSplitBets() {
+        Outcome oc;
+        int n;
+        for (int row=0; row<12; row++) {
+            for (int col=0; col<3; col++) {
+                n = row * 3 + 1 + col;
+                if (col < 2) {
+                    oc = new Outcome(
+                            String.format("Split %d-%d", n, n + 1),
+                            RouletteGame.SPLITBET);
+                    wheel.addOutcome(n, oc);
+                    wheel.addOutcome(n + 1, oc);
+                }
+                if (row < 11) {
+                    oc = new Outcome(
+                            String.format("Split %d-%d", n, n + 3),
+                            RouletteGame.SPLITBET);
+                    wheel.addOutcome(n, oc);
+                    wheel.addOutcome(n + 3, oc);
+                }
+            }
+        }
+    }
+    private void generateStreetBets() {
+        Outcome street;
+        int n;
+        for (int row=0; row<12; row++) {
+            n = row * 3 + 1;
+            street = new Outcome(
+                    String.format("Street %d-%d-%d", n, n+1, n+2),
+                    RouletteGame.STREETBET);
+            wheel.addOutcome(n, street);
+            wheel.addOutcome(n+1, street);
+            wheel.addOutcome(n+2, street);
+        }
+    }
+    private void generateCornerBets() {
+        Outcome corner;
+        int n;
+        for (int row=0; row<11; row++) {
+            for (int col=0; col<2; col++) {
+                n = row * 3 + 1 + col;
+                corner = new Outcome(String.format(
+                        "Corner %d-%d-%d-%d", n, n + 1, n + 3, n + 4),
+                        RouletteGame.CORNERBET);
+                wheel.addOutcome(n, corner);
+                wheel.addOutcome(n + 1, corner);
+                wheel.addOutcome(n + 3, corner);
+                wheel.addOutcome(n + 4, corner);
+            }
+        }
+    }
+    private void generateLineBets() {
+        Outcome line;
+        int n;
+        for (int row=0; row<11; row++) {
+            n = row * 3 + 1;
+            line = new Outcome(String.format(
+                    "Line %d-%d-%d-%d-%d-%d",
+                    n, n+1, n+2, n+3, n+4, n+5),
+                    RouletteGame.LINEBET);
+            wheel.addOutcome(n, line);
+            wheel.addOutcome(n+1, line);
+            wheel.addOutcome(n+2, line);
+            wheel.addOutcome(n+3, line);
+            wheel.addOutcome(n+4, line);
+            wheel.addOutcome(n+5, line);
+        }
+    }
+    private void generateDozenBets() {
+        Outcome dozen;
+        int start, end;
+        for (int d=0; d<3; d++) {
+            start = d * 12 + 1;
+            end = (d + 1) * 12;
+            dozen = new Outcome(String.format(
+                    "Dozen %d-%d", start, end), RouletteGame.DOZENBET);
+            for (int i=start; i<=end; i++) {
+                wheel.addOutcome(i, dozen);
+            }
+        }
+    }
+    private void generateColumnBets() {
+        Outcome column;
+        for (int col=1; col<=3; col++) {
+            column = new Outcome(String.format(
+                    "Column %d", col), RouletteGame.COLUMNBET);
+            for (int row=0; row<12; row++) {
+                wheel.addOutcome(col + row * 3, column);
+            }
+        }
+    }
+    private void generateEvenMoneyBets() {
+        Outcome red = new Outcome("Red", RouletteGame.EVENMONEYBET);
+        Outcome black = new Outcome("Black", RouletteGame.EVENMONEYBET);
+        Outcome odd = new Outcome("Odd", RouletteGame.EVENMONEYBET);
+        Outcome even = new Outcome("Even", RouletteGame.EVENMONEYBET);
+        Outcome low = new Outcome("Low", RouletteGame.EVENMONEYBET);
+        Outcome high = new Outcome("High", RouletteGame.EVENMONEYBET);
+
+        Set<Integer> reds = new HashSet<>(Arrays.asList(
+                1, 3, 5, 7, 9, 12, 14, 16, 18,
+                19, 21, 23, 25, 27, 30, 32, 34, 36));
+
+        for (int i = 1; i < 37; i++) {
+            if (i < 19) wheel.addOutcome(i, low);
+            else wheel.addOutcome(i, high);
+            if (i % 2 == 0) wheel.addOutcome(i, even);
+            else wheel.addOutcome(i, odd);
+            if (reds.contains(i)) wheel.addOutcome(i, red);
+            else wheel.addOutcome(i, black);
+        }
+    }
+}
