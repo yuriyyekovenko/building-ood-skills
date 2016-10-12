@@ -9,45 +9,22 @@ import java.util.Set;
 /**
  * Created by iiekovenko on 05.10.16.
  * Builder creates the Outcomes for all of the 38
- * individual Bin on a Roulette wheel.
+ * individual Bins (including 00) on a Roulette wheel.
  */
+
 public class BinBuilder {
-    private Wheel wheel;
-    private int binCount = 38; //including double-zero
+    Wheel wheel;
+    int binCount;
 
-//    /** MY CUSTOMIZATION
-//     * Constructor creates a wheel and fills it in with outcomes.
-//     * So, to get a ready-to-use wheel, the user should ask BinBuilder
-//     * to build it. In result, the user receives the wheel only after
-//     * it is ready, so no inconsistencies. That is, this variant of
-//     * construction is better than suggested in the book (see the next method).
-//     */
-//    public Wheel buildBins() {
-//        wheel = new Wheel(new Random());
-//        generateStraightBets();
-//        generateFiveBet();
-//        generateSplitBets();
-//        generateStreetBets();
-//        generateCornerBets();
-//        generateLineBets();
-//        generateDozenBets();
-//        generateColumnBets();
-//        generateEvenMoneyBets();
-//        return wheel;
-//    }
-
-    /** ORIGINAL VERSION (PER BOOK)
-     * This build-method (per book instruction) receives Wheel object
-     * with empty bins and fills them in with outcomes.
-     * So, theoretically, the wheel exist for some time in inconsistent state.
-     * That is, misuse becomes possible. BAD.
-     */
-    public void buildBins(Wheel wheel) {
-        this.wheel = wheel;
+    public Wheel buildBins(Random rng) {
+        binCount = 38; //including double-zero
+        wheel = new Wheel(rng);
         for (int i = 0; i < binCount; i++)
             this.wheel.addBin(new Bin());
 
         generateStraightBets();
+        generateDoubleZeroBet();
+        generateZeroBet();
         generateFiveBet();
         generateSplitBets();
         generateStreetBets();
@@ -56,6 +33,7 @@ public class BinBuilder {
         generateDozenBets();
         generateColumnBets();
         generateEvenMoneyBets();
+        return wheel;
     }
     private void generateFiveBet() {
         Outcome five = new Outcome("00-0-1-2-3", RouletteGame.FIVEBET);
@@ -64,16 +42,22 @@ public class BinBuilder {
             wheel.addOutcome(i, five);
         }
     }
-    private void generateStraightBets() {
+    private void generateDoubleZeroBet() {
         wheel.addOutcome(37,
                 new Outcome("00", RouletteGame.STRAIGHTBET));
-        for (int i=0; i<37; i++) {
+    }
+    void generateZeroBet() {
+        wheel.addOutcome(0,
+                new Outcome("0", RouletteGame.STRAIGHTBET));
+    }
+    void generateStraightBets() {
+        for (int i=1; i<=36; i++) {
             wheel.addOutcome(i,
                     new Outcome(Integer.toString(i),
                     RouletteGame.STRAIGHTBET));
         }
     }
-    private void generateSplitBets() {
+    void generateSplitBets() {
         Outcome oc;
         int n;
         for (int row=0; row<12; row++) {
@@ -96,7 +80,7 @@ public class BinBuilder {
             }
         }
     }
-    private void generateStreetBets() {
+    void generateStreetBets() {
         Outcome street;
         int n;
         for (int row=0; row<12; row++) {
@@ -109,7 +93,7 @@ public class BinBuilder {
             wheel.addOutcome(n+2, street);
         }
     }
-    private void generateCornerBets() {
+    void generateCornerBets() {
         Outcome corner;
         int n;
         for (int row=0; row<11; row++) {
@@ -125,7 +109,7 @@ public class BinBuilder {
             }
         }
     }
-    private void generateLineBets() {
+    void generateLineBets() {
         Outcome line;
         int n;
         for (int row=0; row<11; row++) {
@@ -142,7 +126,7 @@ public class BinBuilder {
             wheel.addOutcome(n+5, line);
         }
     }
-    private void generateDozenBets() {
+    void generateDozenBets() {
         Outcome dozen;
         int start, end;
         for (int d=0; d<3; d++) {
@@ -155,7 +139,7 @@ public class BinBuilder {
             }
         }
     }
-    private void generateColumnBets() {
+    void generateColumnBets() {
         Outcome column;
         for (int col=1; col<=3; col++) {
             column = new Outcome(String.format(
@@ -165,7 +149,7 @@ public class BinBuilder {
             }
         }
     }
-    private void generateEvenMoneyBets() {
+    void generateEvenMoneyBets() {
         Outcome red = new Outcome("Red", RouletteGame.EVENMONEYBET);
         Outcome black = new Outcome("Black", RouletteGame.EVENMONEYBET);
         Outcome odd = new Outcome("Odd", RouletteGame.EVENMONEYBET);

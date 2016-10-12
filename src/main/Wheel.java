@@ -13,19 +13,11 @@ public class Wheel {
     private List<Bin> bins;
     private Random rng;
     private Set<Outcome> outcomes;
-//    private int size;
 
     public Wheel(Random rng) {
         this.rng = rng;
-//        size = 38; // american casino, with 00
         outcomes = new HashSet<>();
-
         bins = new ArrayList<>();
-//        for (int i=0; i<size; i++)
-//            bins.add(new Bin());
-
-        BinBuilder builder = new BinBuilder();
-        builder.buildBins(this);
     }
     public void addBin(Bin bin) {
         bins.add(bin);

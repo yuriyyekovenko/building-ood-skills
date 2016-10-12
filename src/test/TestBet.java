@@ -27,7 +27,7 @@ public class TestBet {
     }
     @Test
     public void testLoseAmount() {
-        Assert.assertEquals(bet.loseAmount(), amount);
+        Assert.assertEquals(bet.loseAmount(), outcome.loseAmount(amount));
     }
     @Test
     public void testToString() {
@@ -37,5 +37,9 @@ public class TestBet {
     @Test
     public void testGetOutcome() {
         Assert.assertEquals(bet.getOutcome(), outcome);
+    }
+    @Test
+    public void testGetAmount() {
+        Assert.assertEquals(bet.getAmount(), amount);
     }
 }

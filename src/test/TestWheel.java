@@ -1,9 +1,6 @@
 package test;
 
-import main.Bin;
-import main.Outcome;
-import main.RouletteGame;
-import main.Wheel;
+import main.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -19,27 +16,24 @@ public class TestWheel {
 
     @BeforeClass
     public void setUpClass() {
-        wheel = new Wheel(new Random());
+        wheel = new BinBuilder().buildBins(new Random());
     }
 
     @Test
     public void testWheelIsPopulatedWithBins() {
-        int rouletteWheelCount = 38;
-        for (int i = 0; i < rouletteWheelCount; i++) {
+        for (int i = 0; i < wheel.getSize(); i++) {
             Assert.assertTrue(wheel.getBin(i) != null);
         }
     }
     @Test
     public void testBinsArePopulatedWithOutcomes() {
-        int rouletteWheelCount = 38;
-        for (int i = 0; i < rouletteWheelCount; i++) {
+        for (int i = 0; i < wheel.getSize(); i++) {
             Assert.assertTrue(wheel.getBin(i).size() > 0);
         }
     }
     @Test
     public void testWheelProvidesOutcomesCatalog() {
         Set<Outcome> res = wheel.getOutcome("Split");
-        System.out.println(res.size());
         Assert.assertEquals(wheel.getOutcome("Street").size(), 12);
         Assert.assertEquals(wheel.getOutcome("Split").size(), 57);
         Assert.assertEquals(wheel.getOutcome("Corner").size(), 22);
@@ -58,7 +52,7 @@ public class TestWheel {
     }
     @Test
     public void testAddOutcomeToBinButNoDuplicates() {
-        Wheel mywheel = new Wheel(new Random());
+        Wheel mywheel = new BinBuilder().buildBins(new Random());
         Outcome oc = new Outcome("25", RouletteGame.STRAIGHTBET);
         int initialOutcomeCount = mywheel.getBin(0).size();
         mywheel.addOutcome(0, oc);
@@ -71,7 +65,7 @@ public class TestWheel {
     @Test
     public void testUsingNonRandomClassIfWheelPicksBinsRandomly() {
         NonRandom rng = new NonRandom();
-        Wheel wheel = new Wheel(rng);
+        Wheel wheel = new BinBuilder().buildBins(rng);
 
         rng.setSeed(0);
         Bin bin = wheel.getBin(0);
@@ -88,13 +82,13 @@ public class TestWheel {
         Random workingGen = new Random();
         workingGen.setSeed(1);
 
-        Wheel wheel = new Wheel(workingGen);
-        int expectedRandomValue = goldenGen.nextInt(38);
+        Wheel wheel = new BinBuilder().buildBins(workingGen);
+        int expectedRandomValue = goldenGen.nextInt(wheel.getSize());
 
         Bin bin = wheel.getBin(expectedRandomValue);
         Assert.assertEquals(wheel.next().toString(), bin.toString());
 
-        expectedRandomValue = goldenGen.nextInt(38);
+        expectedRandomValue = goldenGen.nextInt(wheel.getSize());
         bin = wheel.getBin(expectedRandomValue);
         Assert.assertEquals(wheel.next().toString(), bin.toString());
     }

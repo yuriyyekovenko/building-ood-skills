@@ -26,7 +26,6 @@ public class Passenger57  extends Player {
         System.out.println("Player won on " + bet.getOutcome());
     }
     public void lose(Bet bet) {
-        //Use this info to define the next step
         stake -= bet.loseAmount();
         System.out.println("Player lost on " + bet.getOutcome());
     }

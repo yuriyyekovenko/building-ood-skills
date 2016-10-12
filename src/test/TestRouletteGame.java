@@ -20,13 +20,13 @@ public class TestRouletteGame {
     @BeforeClass
     public void beforeClass() {
         rng = new NonRandom();
-        wheel = new Wheel(rng);
+        wheel = new BinBuilder().buildBins(rng);
         table = new Table(10, 200);
         player = new Passenger57(table, wheel);
         game = new RouletteGame(wheel, table);
     }
     @Test
-    public void testOne() {
+    public void testAmericanRoulette() {
         int stakeBefore = player.getStake();
         rng.setSeed(2);
         game.cycle(player);
@@ -35,6 +35,20 @@ public class TestRouletteGame {
 
         stakeBefore = player.getStake();
         rng.setSeed(1);
+        game.cycle(player);
+        Assert.assertTrue(player.getStake() < stakeBefore,
+                "Player unexpectedly won in this cycle.");
+    }
+    @Test
+    public void testEuroRoulette() {
+        int stakeBefore = player.getStake();
+        rng.setSeed(2);
+        game.cycle(player);
+        Assert.assertTrue(player.getStake() > stakeBefore,
+                "Player failed to win in this cycle.");
+
+        stakeBefore = player.getStake();
+        rng.setSeed(0);
         game.cycle(player);
         Assert.assertTrue(player.getStake() < stakeBefore,
                 "Player unexpectedly won in this cycle.");

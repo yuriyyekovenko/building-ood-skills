@@ -1,0 +1,8 @@
+*.class
+
+# Package Files #
+#*.jar
+
+# .idea - IDE project settings #
+.idea/workspace.xml
+.idea/tasks.xml
