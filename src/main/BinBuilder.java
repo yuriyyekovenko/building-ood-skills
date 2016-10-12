@@ -2,10 +2,8 @@ package main;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
-//TODO Maybe, the best implementation is with nested builder class in Wheel2.
 /**
  * Created by iiekovenko on 05.10.16.
  * Builder creates the Outcomes for all of the 38
@@ -14,14 +12,9 @@ import java.util.Set;
 
 public class BinBuilder {
     Wheel wheel;
-    int binCount;
 
-    public Wheel buildBins(Random rng) {
-        binCount = 38; //including double-zero
-        wheel = new Wheel(rng);
-        for (int i = 0; i < binCount; i++)
-            this.wheel.addBin(new Bin());
-
+    public void buildBins(Wheel wheel) {
+        this.wheel = wheel;
         generateStraightBets();
         generateDoubleZeroBet();
         generateZeroBet();
@@ -33,16 +26,15 @@ public class BinBuilder {
         generateDozenBets();
         generateColumnBets();
         generateEvenMoneyBets();
-        return wheel;
     }
-    private void generateFiveBet() {
+    void generateFiveBet() {
         Outcome five = new Outcome("00-0-1-2-3", RouletteGame.FIVEBET);
         wheel.addOutcome(37, five);
         for (int i=0; i<6; i++) {
             wheel.addOutcome(i, five);
         }
     }
-    private void generateDoubleZeroBet() {
+    void generateDoubleZeroBet() {
         wheel.addOutcome(37,
                 new Outcome("00", RouletteGame.STRAIGHTBET));
     }

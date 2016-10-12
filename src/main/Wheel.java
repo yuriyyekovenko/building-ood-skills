@@ -6,21 +6,32 @@ import java.util.*;
  * Created by iiekovenko on 03.10.16.
  * Model of roulette wheel containing bins and able
  * to pick one of bins randomly.
- * Bins are stored as an indexed sequence 0, 1, 2, ..., 36, and maybe 00
+ * Bins are stored as an indexed sequence 0, 1, 2, ..., 36, and 00.
  */
 public class Wheel {
 
-    private List<Bin> bins;
-    private Random rng;
-    private Set<Outcome> outcomes;
+    List<Bin> bins;
+    Random rng;
+    Set<Outcome> outcomes;
 
+    public Wheel() {
+        this(new Random());
+    }
+    /*
+    * this constructor (with input parameter) is needed
+    * for testability purposes.
+    * */
     public Wheel(Random rng) {
         this.rng = rng;
         outcomes = new HashSet<>();
         bins = new ArrayList<>();
+        buildBins();
     }
-    public void addBin(Bin bin) {
-        bins.add(bin);
+    void buildBins() {
+        for (int i = 0; i < 38; i++)
+            bins.add(new Bin());
+        BinBuilder builder = new BinBuilder();
+        builder.buildBins(this);
     }
     public void addOutcome(int bin, Outcome outcome) {
         outcomes.add(outcome);
