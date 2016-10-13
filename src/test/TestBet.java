@@ -26,10 +26,6 @@ public class TestBet {
                 amount + outcome.winAmount(amount));
     }
     @Test
-    public void testLoseAmount() {
-        Assert.assertEquals(bet.loseAmount(), outcome.loseAmount(amount));
-    }
-    @Test
     public void testToString() {
         Assert.assertEquals(bet.toString(),
                 amount + " on " + outcome.toString());

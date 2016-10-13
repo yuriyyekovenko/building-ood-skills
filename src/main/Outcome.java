@@ -19,15 +19,7 @@ public class Outcome {
     public int winAmount(int amount) {
         return amount * odds;
     }
-    /*
-    * In most cases there is nothing to return to the player
-    * if his bet has been lost, because his stake has been reduced when
-    * the bet was placed.
-    * But some special cases can happen and be implemented in subclasses.
-    * */
-    public int loseAmount(int amount) {
-        return 0;
-    }
+
     public boolean equals(Outcome other) {
         return name.equals(other.name);
     }
@@ -41,5 +33,8 @@ public class Outcome {
     }
     public String getName() {
         return name;
+    }
+    public int getOdds() {
+        return odds;
     }
 }

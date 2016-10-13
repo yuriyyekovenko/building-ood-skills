@@ -11,18 +11,19 @@ public class Bet {
         this.amount = amount;
         this.outcome = outcome;
     }
+
     public int winAmount() {
         return outcome.winAmount(amount) + amount;
     }
-    public int loseAmount() {
-        return outcome.loseAmount(amount);
-    }
+
     public String toString() {
         return String.format("%d on %s", amount, outcome);
     }
+
     public int getAmount() {
         return amount;
     }
+
     public Outcome getOutcome() {
         return outcome;
     }

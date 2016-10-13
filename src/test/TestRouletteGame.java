@@ -23,20 +23,38 @@ public class TestRouletteGame {
         wheel = new Wheel(rng);
         table = new Table(10, 200);
         player = new Passenger57(table, wheel);
+        player.setStake(500);
         game = new RouletteGame(wheel, table);
     }
     @Test
     public void testAmericanRoulette() {
-        int stakeBefore = player.getStake();
+        int betAmount = table.getMinimum();
+        int startStake = player.getStake();
         rng.setSeed(2);
         game.cycle(player);
-        Assert.assertTrue(player.getStake() > stakeBefore,
+        Assert.assertEquals(player.getStake(), startStake + betAmount,
                 "Player failed to win in this cycle.");
 
-        stakeBefore = player.getStake();
+        startStake = player.getStake();
         rng.setSeed(1);
         game.cycle(player);
-        Assert.assertTrue(player.getStake() < stakeBefore,
+        Assert.assertEquals(player.getStake(), startStake - betAmount,
                 "Player unexpectedly won in this cycle.");
+    }
+    @Test
+    public void testLaPartageRuleOfEuroRoulette() {
+        wheel = new EuroWheel(rng);
+        player = new Passenger57(table, wheel, 500);
+        game = new RouletteGame(wheel, table);
+
+        int betAmount = table.getMinimum();
+        int startStake = player.getStake();
+        rng.setSeed(0);
+        game.cycle(player);
+        Assert.assertEquals(
+                player.getStake(),
+                startStake - betAmount + betAmount / 2,
+                "Player is expected to get a half of even-money bet " +
+                        "if Zero won.");
     }
 }

@@ -5,32 +5,15 @@ package main;
  */
 public class Passenger57  extends Player {
     private Outcome black;
-    private Table table;
-    private int stake;
 
     public Passenger57(Table table, Wheel wheel) {
-        this.table = table;
-        black = wheel.getOutcome("Black").toArray(new Outcome[1])[0];
-
-        //TODO Probably stake should be defined by Game?
-        stake = 500;
+        super(table, wheel);
+        black = wheel.getOutcome("Black");
     }
     public void placeBets() {
-        //Smarter player will contain some logic to define amount
-        int amount = 10;
-        table.placeBet(new Bet(amount, black));
-        stake -= amount;
-    }
-    public void win(Bet bet) {
-        stake += bet.winAmount();
-        System.out.println("Player won on " + bet.getOutcome());
-    }
-    public void lose(Bet bet) {
-        stake -= bet.loseAmount();
-        System.out.println("Player lost on " + bet.getOutcome());
-    }
-    @Override
-    public int getStake() {
-        return stake;
+        super.placeBets();
+        int amount = table.getMinimum();
+        table.placeBet(new Bet(table.getMinimum(), black));
+        setStake(getStake() - amount);
     }
 }

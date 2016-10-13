@@ -43,7 +43,7 @@ public class Wheel {
     public Bin getBin(int bin) {
         return bins.get(bin);
     }
-    public Set<Outcome> getOutcome(String name) {
+    public Set<Outcome> getOutcomes(String name) {
         Set<Outcome> result = new HashSet<>();
         for (Outcome oc : outcomes) {
             if (oc.getName().startsWith(name))
@@ -51,7 +51,27 @@ public class Wheel {
         }
         return result;
     }
+    public Outcome getOutcome(String name) {
+        Outcome result = null;
+        for (Outcome oc : outcomes) {
+            if (oc.getName().equals(name)) {
+                result = oc;
+                break;
+            }
+        }
+        if (result == null)
+            throw new NoSuchElementException(String.format(
+                    "Outcome with name %s does not exist.", name));
+        return result;
+    }
     public int getSize() {
         return bins.size();
+    }
+
+    /*
+    * The rule available only in Euro=style roulette.
+    * */
+    boolean isLaPartageEnabled() {
+        return false;
     }
 }

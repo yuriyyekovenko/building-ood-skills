@@ -21,9 +21,4 @@ public class EuroBinBuilder extends BinBuilder {
         generateColumnBets();
         generateEvenMoneyBets();
     }
-    @Override
-    void generateZeroBet() {
-        wheel.addOutcome(0,
-                new PrisonOutcome("0", RouletteGame.STRAIGHTBET));
-    }
 }

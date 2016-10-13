@@ -16,11 +16,13 @@ public class Table {
     public Table() {
         bets = new LinkedList<>();
     }
+
     public Table(int minimum, int limit) {
         this();
         this.minimum = minimum;
         this.limit = limit;
     }
+
     public boolean isValid() throws InvalidBet {
         int betSum = 0;
         for (Bet b : bets) {
@@ -32,17 +34,30 @@ public class Table {
             throw new InvalidBet();
         return true;
     }
+
     public void placeBet(Bet bet) {
         bets.add(bet);
     }
+
     public String toString() {
         return bets.toString();
     }
+
     public ListIterator<Bet> iterator() {
         return bets.listIterator();
     }
+
     public void removeBets() {
         bets.clear();
     }
+
+    public int getMinimum() {
+        return minimum;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
 
 }

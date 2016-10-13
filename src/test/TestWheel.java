@@ -6,7 +6,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Random;
-import java.util.Set;
 
 /**
  * Created by iiekovenko on 05.10.16.
@@ -33,20 +32,20 @@ public class TestWheel {
     }
     @Test
     public void testWheelProvidesOutcomesCatalog() {
-        Assert.assertEquals(wheel.getOutcome("Street").size(), 12);
-        Assert.assertEquals(wheel.getOutcome("Split").size(), 57);
-        Assert.assertEquals(wheel.getOutcome("Corner").size(), 22);
-        Assert.assertEquals(wheel.getOutcome("Line").size(), 11);
-        Assert.assertEquals(wheel.getOutcome("Dozen").size(), 3);
-        Assert.assertEquals(wheel.getOutcome("Column").size(), 3);
-        Assert.assertEquals(wheel.getOutcome("Red").size(), 1);
-        Assert.assertEquals(wheel.getOutcome("Black").size(), 1);
-        Assert.assertEquals(wheel.getOutcome("Low").size(), 1);
-        Assert.assertEquals(wheel.getOutcome("High").size(), 1);
-        Assert.assertEquals(wheel.getOutcome("Odd").size(), 1);
-        Assert.assertEquals(wheel.getOutcome("Even").size(), 1);
-        Assert.assertEquals(wheel.getOutcome("00-0-1-2-3").size(), 1);
-        Assert.assertEquals(wheel.getOutcome("").size() - 115, 38,
+        Assert.assertEquals(wheel.getOutcomes("Street").size(), 12);
+        Assert.assertEquals(wheel.getOutcomes("Split").size(), 57);
+        Assert.assertEquals(wheel.getOutcomes("Corner").size(), 22);
+        Assert.assertEquals(wheel.getOutcomes("Line").size(), 11);
+        Assert.assertEquals(wheel.getOutcomes("Dozen").size(), 3);
+        Assert.assertEquals(wheel.getOutcomes("Column").size(), 3);
+        Assert.assertEquals(wheel.getOutcomes("Red").size(), 1);
+        Assert.assertEquals(wheel.getOutcomes("Black").size(), 1);
+        Assert.assertEquals(wheel.getOutcomes("Low").size(), 1);
+        Assert.assertEquals(wheel.getOutcomes("High").size(), 1);
+        Assert.assertEquals(wheel.getOutcomes("Odd").size(), 1);
+        Assert.assertEquals(wheel.getOutcomes("Even").size(), 1);
+        Assert.assertEquals(wheel.getOutcomes("00-0-1-2-3").size(), 1);
+        Assert.assertEquals(wheel.getOutcomes("").size() - 115, 38,
                 "Ensure there are 38 straight bets in the catalog.");
     }
     @Test
